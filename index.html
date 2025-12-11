@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lina's Kitchen</title>
+
+  <style>
+    body { margin:0; font-family: Arial, sans-serif; background:#fafafa; color:#333; }
+    header { position:sticky; top:0; background:#fff; padding:15px 25px; 
+      box-shadow:0 2px 6px rgba(0,0,0,0.15); display:flex; justify-content:space-between; 
+      align-items:center; z-index:10; }
+
+    .logo { display:flex; gap:14px; align-items:center; }
+    .logo-badge { width:55px; height:55px; border-radius:12px; background:linear-gradient(135deg,#ff6b6b,#e74c3c); 
+      color:#fff; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:bold; }
+    .logo-text strong { font-size:19px; }
+    .logo-text small { color:#666; font-size:13px; }
+
+    nav a { margin-left:20px; text-decoration:none; color:#333; font-size:15px; font-weight:600; cursor:pointer; }
+    nav a:hover { color:#e74c3c; }
+
+    .container { max-width:1100px; margin:auto; padding:30px 20px; }
+
+    #home img {
+      width:180px; height:180px; border-radius:20px; object-fit:cover; display:block; 
+      margin:10px auto; box-shadow:0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .sosmed-btn {
+      display:inline-block; padding:10px 18px; background:#e74c3c; color:#fff; 
+      border-radius:25px; text-decoration:none; font-weight:bold; margin:7px; transition:0.25s;
+    }
+
+    .menu-grid {
+      display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+      gap:28px; margin-top:25px;
+    }
+
+    .card {
+      background:#fff; padding:18px; border-radius:18px; box-shadow:0 3px 12px rgba(0,0,0,0.12);
+      transition:0.2s;
+    }
+    .card:hover { transform:translateY(-5px); }
+
+    .card img { width:100%; height:190px; border-radius:14px; object-fit:cover; }
+
+    .desc { font-size:14px; color:#666; margin-top:6px; line-height:1.4; }
+
+    .price { color:#c62828; font-weight:bold; font-size:18px; text-align:center; margin-top:10px; }
+
+    footer { text-align:center; padding:25px; color:#777; margin-top:60px; }
+
+    .testi-box {
+      background:#fff; padding:16px; border-radius:14px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.15); margin-top:15px;
+    }
+    .input-box { width:100%; padding:10px; border-radius:10px; border:1px solid #ccc; margin-top:10px; }
+    .btn-send,.btn-primary { background:#e74c3c; color:#fff; border:none; padding:10px 20px; border-radius:20px; cursor:pointer; margin-top:10px; font-weight:bold; }
+
+    .qty-control { display:flex; gap:8px; align-items:center; justify-content:center; margin-top:10px; }
+    .qty-btn { padding:6px 10px; border-radius:8px; border:1px solid #ddd; background:#fff; cursor:pointer; }
+    .checkout-panel { max-width:800px; margin:20px auto; background:#fff; padding:18px; border-radius:12px; box-shadow:0 4px 18px rgba(0,0,0,0.08); }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      <div class="logo-badge">LK</div>
+      <div class="logo-text">
+        <strong>Lina's Kitchen</strong><br>
+        <small>Fresh • Homemade • Made With Love</small>
+      </div>
+    </div>
+
+    <nav>
+      <a onclick="showSection('home')">Beranda</a>
+      <a onclick="showSection('menu')">Menu</a>
+      <a onclick="showSection('purchase')">Pembelian</a>
+      <a onclick="showSection('testimonial')">Testimoni</a>
+    </nav>
+  </header>
+
+  <div class="container">
+
+    <!-- ======================= BERANDA ======================= -->
+    <section id="home">
+      <img src="assets/Logo.png.jpeg">
+      <h1 style="text-align:center; color:#c62828; font-size:30px;">Selamat Datang</h1>
+
+      <!-- LINK SOSMED AKTIF -->
+      <div style="text-align:center;">
+        <a class="sosmed-btn" 
+           href="https://www.instagram.com/linas_kitchen22?igsh=anZ3cHNrOGQyaHI0" 
+           target="_blank">Instagram Kami</a>
+
+        <a class="sosmed-btn" 
+           href="https://wa.me/6282312229080"
+           target="_blank">WhatsApp Kami</a>
+      </div>
+
+    </section>
+
+    <!-- ======================= MENU ======================= -->
+    <section id="menu" style="display:none;">
+      <h2 style="font-size:30px; font-weight:bold;">Menu Terlaris</h2>
+      <div class="menu-grid" id="menuArea"></div>
+    </section>
+
+    <!-- ======================= PEMBELIAN ======================= -->
+    <section id="purchase" style="display:none;">
+      <h2 style="font-size:28px; font-weight:bold;">Pembelian</h2>
+      <p>Silakan pilih jumlah pesanan, kemudian klik Checkout.</p>
+      <div class="menu-grid" id="purchaseMenu"></div>
+
+      <button class="btn-primary" style="margin-top:20px;" onclick="openCheckout()">
+        Checkout
+      </button>
+    </section>
+
+    <!-- ======================= CHECKOUT ======================= -->
+    <section id="checkout" style="display:none;">
+      <h2 style="font-size:28px; font-weight:bold;">Checkout Pesanan</h2>
+
+      <div id="checkoutArea" class="checkout-panel"></div>
+
+      <h3>Data Pembeli</h3>
+      <input id="buyerName" class="input-box" placeholder="Nama lengkap">
+      <input id="buyerAddress" class="input-box" placeholder="Alamat lengkap">
+
+      <h3>Metode Pembayaran</h3>
+      <select id="buyerPayment" class="input-box">
+        <option>COD (Bayar di tempat)</option>
+        <option>Transfer BCA</option>
+        <option>Transfer Dana</option>
+        <option>Transfer OVO</option>
+      </select>
+
+      <button class="btn-primary" style="margin-top:20px;" onclick="sendToWhatsapp()">
+        Bayar & Kirim Pesanan ke WhatsApp
+      </button>
+    </section>
+
+    <!-- ======================= TESTIMONI ======================= -->
+    <section id="testimonial" style="display:none;">
+      <h2 style="font-size:28px; font-weight:bold;">Testimoni Pelanggan</h2>
+
+      <h3>Tulis Testimoni</h3>
+
+      <label>Nama Lengkap</label>
+      <input id="testiBuyer" class="input-box" placeholder="Nama lengkap...">
+
+      <label>Rating</label>
+      <select id="testiRating" class="input-box">
+        <option>⭐</option>
+        <option>⭐⭐</option>
+        <option>⭐⭐⭐</option>
+        <option>⭐⭐⭐⭐</option>
+        <option selected>⭐⭐⭐⭐⭐</option>
+      </select>
+
+      <label>Komentar</label>
+      <textarea id="testiComment" class="input-box" placeholder="Tulis komentar..." rows="4"></textarea>
+
+      <button class="btn-primary" style="margin-top:15px;" onclick="sendTestiOnly()">
+        Kirim Testimoni
+      </button>
+
+      <h3 style="margin-top:25px;">Semua Testimoni</h3>
+      <div id="testiList"></div>
+    </section>
+
+    <footer>© 2025 Lina's Kitchen — Developed by Kelompok 3</footer>
+  </div>
+
+<!-- ======================= SCRIPT ======================= -->
+<script>
+  function showSection(id) {
+    ["home", "menu", "purchase", "testimonial", "checkout"]
+      .forEach(p => document.getElementById(p).style.display = "none");
+    document.getElementById(id).style.display = "block";
+  }
+
+  const menuItems = [
+      { name:'Cireng Ayam Pedas', img:'assets/cireng ayam pedas.jpeg', desc:'Cireng gurih berisi ayam suwir pedas, renyah di luar lembut di dalam. Favorit pelanggan!', price:17000 },
+      { name:'Cireng Bakso Pedas', img:'assets/cireng bakso pedas.jpeg', desc:'Perpaduan cireng kenyal dan bakso lembut dengan bumbu pedas nikmat. Cocok untuk camilan!', price:17000 },
+      { name:'Tahu Ayam Pedas', img:'assets/Tahu ayam pedas.jpeg', desc:'Tahu premium dengan isian ayam bumbu pedas yang juicy, bikin nagih setiap gigitan.', price:17000 },
+      { name:'Tahu Bakso Pedas', img:'assets/tahu bakso pedas.jpeg', desc:'Tahu lembut berisi bakso pedas gurih, pas ditemani saus sambal spesial.', price:17000 }
+  ];
+
+  const menuArea = document.getElementById('menuArea');
+  const purchaseMenu = document.getElementById('purchaseMenu');
+
+  menuItems.forEach((item, i) => {
+    menuArea.innerHTML += `
+      <div class="card">
+        <img src="${item.img}">
+        <h3>${item.name}</h3>
+        <p class="desc">${item.desc}</p>
+      </div>
+    `;
+
+    purchaseMenu.innerHTML += `
+      <div class="card">
+        <img src="${item.img}">
+        <h3>${item.name}</h3>
+        <p class="price">Rp ${item.price.toLocaleString()}</p>
+        <div class="qty-control">
+          <button class="qty-btn" onclick="changeQty(${i}, -1)">-</button>
+          <span id="qty${i}">0</span>
+          <button class="qty-btn" onclick="changeQty(${i}, 1)">+</button>
+        </div>
+      </div>
+    `;
+  });
+
+  const quantities = [0,0,0,0];
+
+  function changeQty(index, value) {
+    quantities[index] = Math.max(0, quantities[index] + value);
+    document.getElementById("qty"+index).innerText = quantities[index];
+  }
+
+  function openCheckout() {
+    const checkoutArea = document.getElementById("checkoutArea");
+    checkoutArea.innerHTML = "";
+
+    let hasOrder = false;
+
+    menuItems.forEach((item, i) => {
+      if (quantities[i] > 0) {
+        hasOrder = true;
+        checkoutArea.innerHTML += `
+          <p>${item.name} × ${quantities[i]} — <b>Rp ${(item.price * quantities[i]).toLocaleString()}</b></p>
+        `;
+      }
+    });
+
+    if (!hasOrder) {
+      alert("Belum ada pesanan!");
+      return;
+    }
+
+    showSection("checkout");
+  }
+
+  function sendToWhatsapp() {
+    const name = document.getElementById("buyerName").value.trim();
+    const address = document.getElementById("buyerAddress").value.trim();
+    const payment = document.getElementById("buyerPayment").value;
+
+    if (!name || !address) {
+      alert("Nama dan alamat wajib diisi!");
+      return;
+    }
+
+    let message = `Halo, saya ingin memesan:%0A`;
+    let total = 0;
+
+    menuItems.forEach((item, i) => {
+      if (quantities[i] > 0) {
+        message += `• ${item.name} x ${quantities[i]} = Rp ${(item.price * quantities[i]).toLocaleString()}%0A`;
+        total += item.price * quantities[i];
+      }
+    });
+
+    message += `%0ATotal: Rp ${total.toLocaleString()}%0A`;
+    message += `%0AAtas nama: ${name}%0AAlamat: ${address}%0AMetode Pembayaran: ${payment}%0A`;
+    message += `%0AMohon diproses ya kak....`;
+
+    window.open(`https://wa.me/6282312229080?text=${message}`, "_blank");
+  }
+
+  // ==================== TESTIMONI TANPA PEMESANAN ====================
+  function loadTestimoni() {
+    const list = JSON.parse(localStorage.getItem("testimoni") || "[]");
+    const area = document.getElementById("testiList");
+    area.innerHTML = "";
+
+    list.forEach(t => {
+      area.innerHTML += `
+        <div class="testi-box">
+          <div><b>${t.name}</b></div>
+          <div>${t.rating}</div>
+          <div>${t.comment}</div>
+        </div>
+      `;
+    });
+  }
+
+  function sendTestiOnly() {
+    const name     = document.getElementById("testiBuyer").value.trim();
+    const rating   = document.getElementById("testiRating").value;
+    const comment  = document.getElementById("testiComment").value.trim();
+
+    if (!name || !comment) {
+      alert("Nama dan komentar wajib diisi!");
+      return;
+    }
+
+    const list = JSON.parse(localStorage.getItem("testimoni") || "[]");
+
+    list.push({
+      name,
+      rating,
+      comment
+    });
+
+    localStorage.setItem("testimoni", JSON.stringify(list));
+    loadTestimoni();
+
+    alert("Terima kasih atas testimoninya!");
+  }
+
+  loadTestimoni();
+</script>
+
+</body>
+</html>
